@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { MagneticButton } from "@/components/effects/MagneticButton";
 import { LotusDivider, Mandala } from "@/components/effects/Ornaments";
 
@@ -103,8 +103,8 @@ function ScrollHint({
   opacity,
 }: {
   text: string;
-  spread: ReturnType<typeof useTransform<number, number>>;
-  opacity: ReturnType<typeof useTransform<number, number>>;
+  spread: MotionValue<number>;
+  opacity: MotionValue<number>;
 }) {
   const letters = text.split("");
   return (
@@ -128,7 +128,7 @@ function Letter({
 }: {
   char: string;
   index: number;
-  spread: ReturnType<typeof useTransform<number, number>>;
+  spread: MotionValue<number>;
 }) {
   const x = useTransform(spread, (v) => v * index * 0.1);
   return (
