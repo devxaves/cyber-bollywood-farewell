@@ -87,29 +87,53 @@ export function HeroSection() {
           </div>
         </motion.div>
 
-        {/* "Scroll to begin" letters that fly apart */}
-        <motion.div
-          style={{ opacity: scrollOpacity }}
-          className="absolute bottom-10 left-0 right-0 flex justify-center"
-        >
-          <motion.p className="flex font-ornament text-xs uppercase text-[#FFF8DC]/70">
-            {scrollText.split("").map((c, i) => {
-              const offset = i - scrollText.length / 2;
-              return (
-                <motion.span
-                  key={i}
-                  style={{
-                    x: useTransform(scrollLetterSpread, (v) => v * offset * 0.1),
-                  }}
-                  className="inline-block"
-                >
-                  {c === " " ? "\u00A0" : c}
-                </motion.span>
-              );
-            })}
-          </motion.p>
-        </motion.div>
+        <ScrollHint
+          text={scrollText}
+          spread={scrollLetterSpread}
+          opacity={scrollOpacity}
+        />
       </div>
     </section>
+  );
+}
+
+function ScrollHint({
+  text,
+  spread,
+  opacity,
+}: {
+  text: string;
+  spread: ReturnType<typeof useTransform<number, number>>;
+  opacity: ReturnType<typeof useTransform<number, number>>;
+}) {
+  const letters = text.split("");
+  return (
+    <motion.div
+      style={{ opacity }}
+      className="absolute bottom-10 left-0 right-0 flex justify-center"
+    >
+      <p className="flex font-ornament text-xs uppercase text-[#FFF8DC]/70">
+        {letters.map((c, i) => (
+          <Letter key={i} char={c} index={i - letters.length / 2} spread={spread} />
+        ))}
+      </p>
+    </motion.div>
+  );
+}
+
+function Letter({
+  char,
+  index,
+  spread,
+}: {
+  char: string;
+  index: number;
+  spread: ReturnType<typeof useTransform<number, number>>;
+}) {
+  const x = useTransform(spread, (v) => v * index * 0.1);
+  return (
+    <motion.span style={{ x }} className="inline-block">
+      {char === " " ? "\u00A0" : char}
+    </motion.span>
   );
 }
